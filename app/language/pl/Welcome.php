@@ -8,14 +8,14 @@ return array(
 	'welcome_text' => 'Witaj',
 	'welcome_message' => '
 		Cześć, witaj z kontrolera welcome! <br/>
-		Tą treść możesz zmienić w pliku <code>app/views/welcome/welcome.php</code>
+		Tą treść możesz zmienić w pliku <code>views/welcome/welcome.php</code>
 	',
 
 	// Subpage method
 	'subpage_text' => 'Podstrona',
 	'subpage_message' => '
 		Cześć, witaj z kontrolera welcome i metody subpage! <br/>
-		Tą treść możesz zmienić w pliku <code>app/views/welcome/subpage.php</code>
+		Tą treść możesz zmienić w pliku <code>views/welcome/subpage.php</code>
 	',
 
 	// Buttons

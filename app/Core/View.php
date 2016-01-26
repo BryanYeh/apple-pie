@@ -31,7 +31,7 @@ class View
     {
         self::sendHeaders();
         
-        require SMVC."app/views/$path.php";
+        require SMVC."views/$path.php";
     }
 
     /**
@@ -59,7 +59,7 @@ class View
     {
         self::sendHeaders();
 
-        require SMVC."app/templates/$custom/$path.php";
+        require SMVC."templates/$custom/$path.php";
     }
 
     /**

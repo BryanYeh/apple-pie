@@ -42,9 +42,9 @@ class Url
     public static function templatePath($custom = false)
     {
         if ($custom == true) {
-            return DIR.'app/templates/'.$custom.'/';
+            return DIR.'templates/'.$custom.'/';
         } else {
-            return DIR.'app/templates/'.TEMPLATE.'/';
+            return DIR.'templates/'.TEMPLATE.'/';
         }
     }
 
@@ -57,9 +57,9 @@ class Url
     public static function relativeTemplatePath($custom = false)
     {
         if ($custom) {
-            return "app/templates/".$custom."/";
+            return "templates/".$custom."/";
         } else {
-            return "app/templates/".TEMPLATE."/";
+            return "templates/".TEMPLATE."/";
         }
     }
 
