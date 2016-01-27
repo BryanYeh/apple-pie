@@ -27,6 +27,8 @@ Router::any('reset-password', 'Controllers\Auth@resetPassword');
 Router::any('resend-activation-email', 'Controllers\Auth@resendActivation');
 
 
+
+
 /** Module routes. */
 $hooks = Hooks::get();
 $hooks->run('routes');

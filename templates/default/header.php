@@ -1,11 +1,8 @@
 <?php
-/**
- * Sample layout
- */
 
-use Helpers\Assets;
-use Helpers\Url;
-use Helpers\Hooks;
+use Helpers\Assets,
+	Helpers\Url,
+	Helpers\Hooks;
 
 //initialise hooks
 $hooks = Hooks::get();
@@ -20,7 +17,7 @@ $hooks = Hooks::get();
 	//hook for plugging in meta tags
 	$hooks->run('meta');
 	?>
-	<title><?php echo $data['title'].' - '.SITETITLE; //SITETITLE defined in app/Core/Config.php ?></title>
+	<title><?php echo $data['title'].' - '.SITETITLE;?></title>
 
 	<!-- CSS -->
 	<?php
@@ -35,6 +32,35 @@ $hooks = Hooks::get();
 
 </head>
 <body>
+<nav class="navbar navbar-default">
+	<div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Brand</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li><a href="#">About</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<?php if(!$data['isLoggedIn']){ ?>
+					<li><a href="<?php echo DIR; ?>login">Login</a></li>
+					<li><a href="<?php echo DIR; ?>register">Register</a></li>
+				<?php }else{ ?>
+					<li><a href="<?php echo DIR; ?>logout">Logout</a></li>
+				<?php }?>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
+</nav>
 <?php
 //hook for running code after body tag
 $hooks->run('afterBody');

@@ -4,9 +4,12 @@ namespace Controllers;
 
 
 use Core\Controller,
+    Core\View,
     Helpers\Auth\Auth as AuthHelper,
     Helpers\Csrf,
-    Helpers\Url;
+    Helpers\Url,
+    Helpers\Request;
+
 
 class Auth extends Controller
 {
@@ -19,10 +22,11 @@ class Auth extends Controller
         $this->language->load('Welcome');
         $this->auth = new AuthHelper();
 
-        if($this->auth->isLogged()){
+        if($this->auth->isLogged()) {
             $u_id = $this->auth->currentSessionInfo()['uid'];
             //put the user in the online table using $u_id
         }
+
     }
 
     /**
@@ -34,9 +38,24 @@ class Auth extends Controller
             Url::redirect();
 
         if(isset($_POST['submit']) && Csrf::isTokenValid()){
+            $username = Request::post('username');
+            $password = Request::post('password');
+            $rememberMe = Request::post('rememberMe');
 
+            $email = $this->auth->checkIfEmail($username);
+            $username = count($email) != 0 ? $email[0]->username : $username;
+
+            if($this->auth->login($username,$password)){
+                Url::redirect();
+            }
         }
 
+        $data['csrf_token'] = Csrf::makeToken();
+        $data['title'] = 'Login to Account';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        View::renderTemplate('header', $data);
+        View::renderTemplate('login', $data);
+        View::renderTemplate('footer', $data);
     }
 
     /**

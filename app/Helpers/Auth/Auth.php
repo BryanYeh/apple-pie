@@ -263,7 +263,7 @@ class Auth {
         $hash = md5(microtime()); // unique session hash
         // Fetch User ID :		
         $queryUid = $this->authorize->getUserID($username);
-        $uid = $queryUid[0]->id;
+        $uid = $queryUid[0]->userID;
         // Delete all previous sessions :
         $this->authorize->deleteSession($username);
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -888,4 +888,14 @@ class Auth {
         }
     }
 
+    /**
+     * Check to see if email exists in users database
+     * @param $email
+     * @return bool
+     */
+    public function checkIfEmail($email){
+        return $this->authorize->getAccountInfoEmail($email);
+//        $count = count($query);
+//        return $count != 0 ? true : false;
+    }
 }

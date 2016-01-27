@@ -18,7 +18,7 @@ class Auth extends Model
      */
     public function getAccountInfo($username)
     {
-        return $this->db->select("SELECT * FROM {PREFIX}users WHERE username=:username", array(":username" => $username));
+        return $this->db->select("SELECT * FROM ".PREFIX."users WHERE username=:username", array(":username" => $username));
     }
 
     /**
@@ -28,7 +28,7 @@ class Auth extends Model
      */
     public function getAccountInfoEmail($email)
     {
-        return $this->db->select("SELECT * FROM {PREFIX}users WHERE email=:email", array(":email" => $email));
+        return $this->db->select("SELECT * FROM ".PREFIX."users WHERE email=:email", array(":email" => $email));
     }
 
     /**
@@ -38,7 +38,7 @@ class Auth extends Model
      */
     public function deleteUser($username)
     {
-        return $this->db->delete("{PREFIX}users", array("username" => $username));
+        return $this->db->delete(PREFIX."users", array("username" => $username));
     }
 
     /**
@@ -48,7 +48,7 @@ class Auth extends Model
      */
     public function sessionInfo($hash)
     {
-        return $this->db->select("SELECT uid, username, expiredate, ip FROM {PREFIX}sessions WHERE hash=:hash", array(':hash' => $hash));
+        return $this->db->select("SELECT uid, username, expiredate, ip FROM ".PREFIX."sessions WHERE hash=:hash", array(':hash' => $hash));
     }
 
     /**
@@ -58,7 +58,7 @@ class Auth extends Model
      */
     public function deleteSession($username)
     {
-        return $this->db->delete("{PREFIX}sessions", array('username' => $username));
+        return $this->db->delete(PREFIX."sessions", array('username' => $username));
     }
 
     /**
@@ -67,7 +67,7 @@ class Auth extends Model
      */
     public function getAttempts()
     {
-        return $this->db->select("SELECT ip, expiredate FROM {PREFIX}attempts");
+        return $this->db->select("SELECT ip, expiredate FROM ".PREFIX."attempts");
     }
 
     /**
@@ -77,7 +77,7 @@ class Auth extends Model
      */
     public function getAttempt($ip)
     {
-        return $this->db->select("SELECT count FROM {PREFIX}attempts WHERE ip=:ip", array(":ip" => $ip));
+        return $this->db->select("SELECT count FROM ".PREFIX."attempts WHERE ip=:ip", array(":ip" => $ip));
     }
 
     /**
@@ -87,7 +87,7 @@ class Auth extends Model
      */
     public function deleteAttempt($where)
     {
-        return $this->db->delete("{PREFIX}attempts", $where);
+        return $this->db->delete(PREFIX."attempts", $where);
     }
 
     /**
@@ -120,6 +120,6 @@ class Auth extends Model
      */
     public function getUserID($username)
     {
-        return $this->db->select("SELECT id FROM {PREFIX}users WHERE username=:username", array(":username" => $username));
+        return $this->db->select("SELECT userID FROM ".PREFIX."users WHERE username=:username", array(":username" => $username));
     }
 }

@@ -10,21 +10,23 @@
 
 namespace Controllers;
 
-use Core\View;
-use Core\Controller;
+use Core\View,
+    Core\Controller,
+    Helpers\Auth\Auth as AuthHelper;
 
 /**
  * Sample controller showing a construct and 2 methods and their typical usage.
  */
 class Welcome extends Controller
 {
-
+    private $auth;
     /**
      * Call the parent construct
      */
     public function __construct()
     {
         parent::__construct();
+        $this->auth = new AuthHelper();
         $this->language->load('Welcome');
     }
 
@@ -35,7 +37,7 @@ class Welcome extends Controller
     {
         $data['title'] = $this->language->get('welcome_text');
         $data['welcome_message'] = $this->language->get('welcome_message');
-
+        $data['isLoggedIn'] = $this->auth->isLogged();
         View::renderTemplate('header', $data);
         View::render('welcome/welcome', $data);
         View::renderTemplate('footer', $data);
@@ -48,7 +50,7 @@ class Welcome extends Controller
     {
         $data['title'] = $this->language->get('subpage_text');
         $data['welcome_message'] = $this->language->get('subpage_message');
-
+        $data['isLoggedIn'] = $this->auth->isLogged();
         View::renderTemplate('header', $data);
         View::render('welcome/subpage', $data);
         View::renderTemplate('footer', $data);
