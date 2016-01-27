@@ -15,7 +15,7 @@ class Auth {
     public $errormsg;
     public $successmsg;
     public $lang;
-    private $authorize;
+    public $authorize;
 
     public function __construct() {
         $this->lang = include 'Lang.php'; //language file messages
@@ -114,7 +114,7 @@ class Auth {
     public function isLogged() {
         $auth_session = Cookie::get("auth_session"); //get hash from browser
         //check if session is valid
-        return ($auth_session != '' && $this->sessionIsValid($auth_session)) ? true : false;
+        return ($auth_session != '' && $this->sessionIsValid($auth_session));
     }
 
     /**
@@ -241,7 +241,7 @@ class Auth {
      * (Currently used on __construct but need more testing)
      */
     private function expireAttempt() {
-        $query_attempts = $this->authorize->getAttempts();
+        $query_attempts = $this->authorize->getAttempts;
         $count = count($query_attempts);
         $curr_time = strtotime(date("Y-m-d H:i:s"));
         if ($count != 0) {
