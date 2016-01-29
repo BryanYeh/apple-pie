@@ -22,7 +22,7 @@ class Auth extends Controller
         $this->language->load('Welcome');
         $this->auth = new AuthHelper();
 
-        if($this->auth->isLogged()) {
+        if ($this->auth->isLogged()) {
             $u_id = $this->auth->currentSessionInfo()['uid'];
             //put the user in the online table using $u_id
         }
@@ -34,10 +34,10 @@ class Auth extends Controller
      */
     public function login()
     {
-        if($this->auth->isLogged())
+        if ($this->auth->isLogged())
             Url::redirect();
 
-        if(isset($_POST['submit']) && Csrf::isTokenValid()){
+        if (isset($_POST['submit']) && Csrf::isTokenValid()) {
             $username = Request::post('username');
             $password = Request::post('password');
             $rememberMe = Request::post('rememberMe');
@@ -45,7 +45,7 @@ class Auth extends Controller
             $email = $this->auth->checkIfEmail($username);
             $username = count($email) != 0 ? $email[0]->username : $username;
 
-            if($this->auth->login($username,$password)){
+            if ($this->auth->login($username, $password)) {
                 Url::redirect();
             }
         }
@@ -63,7 +63,7 @@ class Auth extends Controller
      */
     public function logout()
     {
-        if($this->auth->isLogged()){
+        if ($this->auth->isLogged()) {
             $u_id = $this->auth->currentSessionInfo()['uid'];
             //remove the user from the online table using $u_id
             $this->auth->logout();
@@ -76,22 +76,39 @@ class Auth extends Controller
      */
     public function register()
     {
-        if($this->auth->isLogged())
+        if ($this->auth->isLogged())
             Url::redirect();
 
-        if(isset($_POST['submit']) && Csrf::isTokenValid()){
+        if (isset($_POST['submit']) && Csrf::isTokenValid()) {
 
         }
+
+        $data['csrf_token'] = Csrf::makeToken();
+        $data['title'] = 'Register for an Account';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        if (RECAP_PUBLIC_KEY != "" && RECAP_PRIVATE_KEY != "") {
+            $data['ownjs'] = array(
+                "<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit' async defer></script>",
+                "<script type='text/javascript'>
+                    var onloadCallback = function() {
+                        grecaptcha.render('html_element', {'sitekey' : '".RECAP_PUBLIC_KEY."'});
+                    };
+                </script>");
+        }
+        View::renderTemplate('header', $data);
+        View::renderTemplate('register', $data);
+        View::renderTemplate('footer', $data);
     }
 
     /**
      * Activate an account
      */
-    public function activate(){
-        if($this->auth->isLogged())
+    public function activate()
+    {
+        if ($this->auth->isLogged())
             Url::redirect();
 
-        if(isset($_GET['username']) && isset($_GET['key'])){
+        if (isset($_GET['username']) && isset($_GET['key'])) {
 
         }
     }
@@ -99,8 +116,9 @@ class Auth extends Controller
     /**
      * Account settings
      */
-    public function settings(){
-        if(!$this->auth->isLogged())
+    public function settings()
+    {
+        if (!$this->auth->isLogged())
             Url::redirect('login');
 
     }
@@ -108,8 +126,9 @@ class Auth extends Controller
     /**
      * Change user's password
      */
-    public function changePassword(){
-        if(!$this->auth->isLogged())
+    public function changePassword()
+    {
+        if (!$this->auth->isLogged())
             Url::redirect('login');
 
     }
@@ -117,8 +136,9 @@ class Auth extends Controller
     /**
      * Change user's email
      */
-    public function changeEmail(){
-        if(!$this->auth->isLogged())
+    public function changeEmail()
+    {
+        if (!$this->auth->isLogged())
             Url::redirect('login');
 
     }
@@ -126,8 +146,9 @@ class Auth extends Controller
     /**
      * Forgotten password
      */
-    public function forgotPassword(){
-        if($this->auth->isLogged())
+    public function forgotPassword()
+    {
+        if ($this->auth->isLogged())
             Url::redirect();
 
     }
@@ -135,8 +156,9 @@ class Auth extends Controller
     /**
      * Reset password
      */
-    public function resetPassword(){
-        if($this->auth->isLogged())
+    public function resetPassword()
+    {
+        if ($this->auth->isLogged())
             Url::redirect('login');
 
     }
@@ -144,8 +166,9 @@ class Auth extends Controller
     /**
      * Resend activation for email
      */
-    public function resendActivation(){
-        if(!$this->auth->isLogged())
+    public function resendActivation()
+    {
+        if (!$this->auth->isLogged())
             Url::redirect('login');
 
     }

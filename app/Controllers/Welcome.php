@@ -1,12 +1,4 @@
 <?php
-/**
- * Welcome controller
- *
- * @author David Carr - dave@daveismyname.com
- * @version 2.2
- * @date June 27, 2014
- * @date updated Sept 19, 2015
- */
 
 namespace Controllers;
 
