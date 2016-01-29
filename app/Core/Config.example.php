@@ -16,8 +16,6 @@ use Helpers\Session;
 
 /**
  * Configuration constants and options.
- *
- * RENAME THIS FILE TO Config.php
  */
 class Config
 {
@@ -67,7 +65,7 @@ class Config
         /**
          * Database name.
          */
-        define('DB_NAME', 'mydb');
+        define('DB_NAME', 'dbname');
 
         /**
          * Database username.
@@ -125,16 +123,19 @@ class Config
         define("SITE_NAME", "Test");
 
         // Email FROM address for Auth emails (Activation, password reset...)
-        define("EMAIL_FROM", "email@example.com");
+        define("EMAIL_FROM", "someemail@email.com");
 
         // INT : Max number of attempts for login before user is locked out
         define("MAX_ATTEMPTS", 5);
 
         // URL to Auth Class installation root WITH trailing slash
-        define("BASE_URL", "/");
+        define("BASE_URL", "http://localhost/");
 
         // Account activation route
         define("ACTIVATION_ROUTE", 'activate');
+
+        // Account needs email activation, false=no true=yes
+        define("ACCOUNT_ACTIVATION",false);
 
         // Account password reset route
         define("RESET_PASSWORD_ROUTE", 'resetpassword');

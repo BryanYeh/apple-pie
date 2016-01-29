@@ -79,8 +79,51 @@ class Auth extends Controller
         if ($this->auth->isLogged())
             Url::redirect();
 
-        if (isset($_POST['submit']) && Csrf::isTokenValid()) {
+        if (isset($_POST['submit'])) {
 
+            if(Csrf::isTokenValid()) {
+                $captcha_fail = false;
+
+                if (RECAP_PUBLIC_KEY != "" && RECAP_PRIVATE_KEY != "") {
+                    if (isset($_POST['g-recaptcha-response'])) {
+                        $gRecaptchaResponse = $_POST['g-recaptcha-response'];
+
+                        $recaptcha = new \ReCaptcha\ReCaptcha(RECAP_PRIVATE_KEY);
+                        $resp = $recaptcha->verify($gRecaptchaResponse);
+                        if (!$resp->isSuccess())
+                            $captcha_fail = true;
+                    }
+                }
+                if (!$captcha_fail) {
+                    $username = Request::post('username');
+                    $password = Request::post('password');
+                    $verifypassword = Request::post('confirmPassword');
+                    $email = Request::post('email');
+
+                    $registered = ACCOUNT_ACTIVATION ?
+                        $this->auth->register($username, $password, $verifypassword, $email) :
+                        $this->auth->directRegister($username, $password, $verifypassword, $email);
+
+                    if ($registered) {
+                        $success['message'] = ACCOUNT_ACTIVATION ?
+                            "Registration Successful! Check Your Email For Activating your Account." :
+                            "Registration Successful! Click <a href='".DIR."login'>Login</a> to login.";
+                        $data['type'] = "success";
+                    }
+                    else{
+                        $data['message'] = "Registration Error: Please try again";
+                        $data['type'] = "error";
+                    }
+                }
+                else{
+                    $data['message'] = "Stop being a spambot";
+                    $data['type'] = "error";
+                }
+            }
+            else{
+                $data['message'] = "Stop trying to hack!";
+                $data['type'] = "error";
+            }
         }
 
         $data['csrf_token'] = Csrf::makeToken();
