@@ -446,7 +446,7 @@ class Auth {
                         $body = "Hello {$username}<br/><br/>";
                         $body .= "You recently registered a new account on {SITE_NAME}<br/>";
                         $body .= "To activate your account please click the following link<br/><br/>";
-                        $body .= "<b><a href='{BASE_URL}{ACTIVATION_ROUTE}?username={$username}&key={$activekey}'>Activate my account</a></b>";
+                        $body .= "<b><a href='".BASE_URL.ACTIVATION_ROUTE."/username/{$username}/key/{$activekey}'>Activate my account</a></b>";
                         $mail->body($body);
                         $mail->send();
                         $this->logActivity($username, "AUTH_REGISTER_SUCCESS", "Account created and activation email sent");

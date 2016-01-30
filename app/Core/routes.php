@@ -18,7 +18,7 @@ Router::any('subpage', 'Controllers\Welcome@subPage');
 Router::any('login', 'Controllers\Auth@login');
 Router::any('logout', 'Controllers\Auth@logout');
 Router::any('register', 'Controllers\Auth@register');
-Router::any('activate', 'Controllers\Auth@activate');
+Router::any('activate/username/(:any)/key/(:any)', 'Controllers\Auth@activate');
 Router::any('settings', 'Controllers\Auth@settings');
 Router::any('edit-password', 'Controllers\Auth@changePassword');
 Router::any('edit-email', 'Controllers\Auth@changeEmail');

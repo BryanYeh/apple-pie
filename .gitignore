@@ -1,3 +1,6 @@
 app/Core/Config.php
 .DS_Store
+/vendor/google
+/errorlog.html
 .idea
+/.htaccess

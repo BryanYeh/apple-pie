@@ -76,14 +76,18 @@ class Auth extends Controller
      */
     public function register()
     {
+        //Redirect user to home page if he is already logged in
         if ($this->auth->isLogged())
             Url::redirect();
 
+        //The form is submmited
         if (isset($_POST['submit'])) {
 
+            //Check the CSRF token first
             if(Csrf::isTokenValid()) {
                 $captcha_fail = false;
 
+                //Check the reCaptcha if the public and private keys were provided
                 if (RECAP_PUBLIC_KEY != "" && RECAP_PRIVATE_KEY != "") {
                     if (isset($_POST['g-recaptcha-response'])) {
                         $gRecaptchaResponse = $_POST['g-recaptcha-response'];
@@ -94,12 +98,15 @@ class Auth extends Controller
                             $captcha_fail = true;
                     }
                 }
+
+                //Only continue if captcha did not fail
                 if (!$captcha_fail) {
                     $username = Request::post('username');
                     $password = Request::post('password');
                     $verifypassword = Request::post('confirmPassword');
                     $email = Request::post('email');
 
+                    //register with our without email verification
                     $registered = ACCOUNT_ACTIVATION ?
                         $this->auth->register($username, $password, $verifypassword, $email) :
                         $this->auth->directRegister($username, $password, $verifypassword, $email);
@@ -129,6 +136,7 @@ class Auth extends Controller
         $data['csrf_token'] = Csrf::makeToken();
         $data['title'] = 'Register for an Account';
         $data['isLoggedIn'] = $this->auth->isLogged();
+        //needed for recaptcha
         if (RECAP_PUBLIC_KEY != "" && RECAP_PRIVATE_KEY != "") {
             $data['ownjs'] = array(
                 "<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit' async defer></script>",
@@ -151,9 +159,23 @@ class Auth extends Controller
         if ($this->auth->isLogged())
             Url::redirect();
 
-        if (isset($_GET['username']) && isset($_GET['key'])) {
+        $username = Request::get('username');
+        $activekey = Request::get('key');
 
+        if($this->auth->activateAccount($username, $activekey)) {
+            $data['message'] = "Your Account Has Been Activated!  You may <a href='" . DIR . "login'>Login</a> now.";
+            $data['type'] = 'success';
         }
+        else{
+            $data['message'] = "Account Activation <strong>Failed</strong>! Try again by <a href='".DIR."resend-activation-email'>requesting a new activation key</a>";
+            $data['type'] = 'error';
+        }
+
+        $data['title'] = 'Account Activation';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        View::renderTemplate('header', $data);
+        View::renderTemplate('activate', $data);
+        View::renderTemplate('footer', $data);
     }
 
     /**
@@ -211,7 +233,7 @@ class Auth extends Controller
      */
     public function resendActivation()
     {
-        if (!$this->auth->isLogged())
+        if ($this->auth->isLogged())
             Url::redirect('login');
 
     }
