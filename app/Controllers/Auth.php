@@ -112,7 +112,7 @@ class Auth extends Controller
                         $this->auth->directRegister($username, $password, $verifypassword, $email);
 
                     if ($registered) {
-                        $success['message'] = ACCOUNT_ACTIVATION ?
+                        $data['message'] = ACCOUNT_ACTIVATION ?
                             "Registration Successful! Check Your Email For Activating your Account." :
                             "Registration Successful! Click <a href='".DIR."login'>Login</a> to login.";
                         $data['type'] = "success";
