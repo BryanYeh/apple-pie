@@ -154,13 +154,11 @@ class Auth extends Controller
     /**
      * Activate an account
      */
-    public function activate()
+    public function activate($username,$activekey)
     {
         if ($this->auth->isLogged())
             Url::redirect();
 
-        $username = Request::get('username');
-        $activekey = Request::get('key');
 
         if($this->auth->activateAccount($username, $activekey)) {
             $data['message'] = "Your Account Has Been Activated!  You may <a href='" . DIR . "login'>Login</a> now.";

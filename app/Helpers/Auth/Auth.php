@@ -444,7 +444,7 @@ class Auth {
                         $mail->addAddress($email);
                         $mail->subject(SITE_NAME);
                         $body = "Hello {$username}<br/><br/>";
-                        $body .= "You recently registered a new account on {SITE_NAME}<br/>";
+                        $body .= "You recently registered a new account on ".SITE_NAME."<br/>";
                         $body .= "To activate your account please click the following link<br/><br/>";
                         $body .= "<b><a href='".BASE_URL.ACTIVATION_ROUTE."/username/{$username}/key/{$activekey}'>Activate my account</a></b>";
                         $mail->body($body);
@@ -469,15 +469,23 @@ class Auth {
      * Activates an account 
      * @param string $username
      * @param string $key
+     * @return boolean
      */
     public function activateAccount($username, $key) {
         // check lengst of keys and username strings since this can be directly called
         //  if current account is active dont activate
         $info = array("isactive" => 1, "activekey" => $key);
         $where = array("username" => $username);
-        $this->authorize->updateInDB("users", $info, $where);
-        $this->logActivity($username, "AUTH_ACTIVATE_SUCCESS", "Activation successful. Key Entry deleted.");
-        $this->successmsg[] = $this->lang['activate_success'];
+        $activated = $this->authorize->updateInDB("users", $info, $where);
+        if($activated > 0) {
+            $this->logActivity($username, "AUTH_ACTIVATE_SUCCESS", "Activation successful. Key Entry deleted.");
+            $this->successmsg[] = $this->lang['activate_success'];
+            return true;
+        }
+        else{
+            $this->logActivity($username, "AUTH_ACTIVATE_ERROR", "Activation failed.");
+            return false;
+        }
     }
 
     /**
