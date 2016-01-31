@@ -153,6 +153,8 @@ class Auth extends Controller
 
     /**
      * Activate an account
+     * @param $username
+     * @param $activekey
      */
     public function activate($username,$activekey)
     {
@@ -232,7 +234,25 @@ class Auth extends Controller
     public function resendActivation()
     {
         if ($this->auth->isLogged())
-            Url::redirect('login');
+            Url::redirect();
 
+        if (isset($_POST['submit']) && Csrf::isTokenValid()) {
+            $email = Request::post('email');
+            if($this->auth->resendActivation($email)){
+                $data['message'] = "An activation code has been sent to your email";
+                $data['type'] = "success";
+            }
+            else{
+                $data['message'] = "No account is affiliated with the {$email} or it may have already been activated.";
+                $data['type'] = "error";
+            }
+        }
+
+        $data['csrf_token'] = Csrf::makeToken();
+        $data['title'] = 'Resend Activation Email';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        View::renderTemplate('header', $data);
+        View::renderTemplate('resend', $data);
+        View::renderTemplate('footer', $data);
     }
 }

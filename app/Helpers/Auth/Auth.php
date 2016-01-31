@@ -938,7 +938,63 @@ class Auth {
      */
     public function checkIfEmail($email){
         return $this->authorize->getAccountInfoEmail($email);
-//        $count = count($query);
-//        return $count != 0 ? true : false;
+    }
+
+    public function resendActivation($email)
+    {
+        if (!Cookie::get('auth_session')) {
+            // Input Verification :
+            if (strlen($email) == 0) {
+                $auth_error[] = $this->lang['register_email_empty'];
+            } elseif (strlen($email) > MAX_EMAIL_LENGTH) {
+                $auth_error[] = $this->lang['register_email_long'];
+            } elseif (strlen($email) < MIN_EMAIL_LENGTH) {
+                $auth_error[] = $this->lang['register_email_short'];
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $auth_error[] = $this->lang['register_email_invalid'];
+            }
+            if (count($auth_error) == 0) {
+                // Input is valid
+                // Check DataBase to see if email user is activated
+                $query = $this->authorize->getAccountInfoEmail($email);
+                $count = count($query);
+                if ($count != 0 && $query[0]->isactive == 0) {
+                    // User Account Is not yet active.  Lets get data to resend their activation with new key
+                    $username = $query[0]->username;
+                    $activekey = $this->randomKey(RANDOM_KEY_LENGTH);
+                    // Store the new key in the user's database
+                    $info = array('activekey' => $activekey);
+                    $where = array('username' => $username);
+                    $this->authorize->updateInDB('users',$info,$where);
+                    //EMAIL MESSAGE USING PHPMAILER
+                    $mail = new \Helpers\PhpMailer\Mail();
+                    $mail->setFrom(EMAIL_FROM);
+                    $mail->addAddress($email);
+                    $subject = " " . SITE_NAME . " - Account Activation Link";
+                    $mail->subject($subject);
+                    $body = "Hello {$username}<br/><br/>";
+                    $body .= "You recently registered a new account on " . SITE_NAME . "<br/>";
+                    $body .= "To activate your account please click the following link<br/><br/>";
+                    $body .= "<b><a href='".BASE_URL.ACTIVATION_ROUTE."/username/{$username}/key/{$activekey}'>Activate my account</a></b>";
+                    $body .= "<br><br> You May Copy and Paste this URL in your Browser Address Bar: <br>";
+                    $body .= BASE_URL.ACTIVATION_ROUTE."/username/{$username}/key/{$activekey}";
+                    $body .= "<br><br> You Requested to have this email resent to your email.";
+                    $mail->body($body);
+                    $mail->send();
+                    $this->logActivity($username, "AUTH_REGISTER_SUCCESS", "Account created and activation email sent");
+                    $this->success[] = $this->lang['register_success'];
+                    return true;
+                }else{
+                    return false;
+                }
+            } else {
+                //some error
+                return false;
+            }
+        } else {
+            // User is logged in
+            $auth_error[] = $this->lang['register_email_loggedin'];
+            return false;
+        }
     }
 }

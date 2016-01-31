@@ -59,6 +59,7 @@ $hooks = Hooks::get();
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<?php if(!$data['isLoggedIn']){ ?>
+					<li><a href="<?php echo DIR; ?>resend-activation-email">Resend Activation</a></li>
 					<li><a href="<?php echo DIR; ?>login">Login</a></li>
 					<li><a href="<?php echo DIR; ?>register">Register</a></li>
 				<?php }else{ ?>
