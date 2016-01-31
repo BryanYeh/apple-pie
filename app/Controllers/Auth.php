@@ -196,6 +196,36 @@ class Auth extends Controller
         if (!$this->auth->isLogged())
             Url::redirect('login');
 
+        if(isset($_POST['submit'])){
+
+            // Check to make sure the csrf token is good
+            if (Csrf::isTokenValid()) {
+                // Catch password inputs using the Request helper
+                $currentPassword = Request::post('currentPassword');
+                $newPassword = Request::post('newPassword');
+                $confirmPassword = Request::post('confirmPassword');
+
+                // Get Current User's UserName
+                $u_username = $this->auth->currentSessionInfo()['username'];
+
+                // Run the Activation script
+                if($this->auth->changePass($u_username, $currentPassword, $newPassword, $confirmPassword)){
+                    $data['message'] = "Your password has been changed.";
+                    $data['type'] = "success";
+                }
+                else{
+                    $data['message'] = "An error occurred while changing your password.";
+                    $data['type'] = "error";
+                }
+            }
+        }
+
+        $data['csrf_token'] = Csrf::makeToken();
+        $data['title'] = 'Change Password';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        View::renderTemplate('header', $data);
+        View::renderTemplate('password_change', $data);
+        View::renderTemplate('footer', $data);
     }
 
     /**
