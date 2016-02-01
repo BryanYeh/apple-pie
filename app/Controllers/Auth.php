@@ -48,6 +48,9 @@ class Auth extends Controller
             if ($this->auth->login($username, $password)) {
                 Url::redirect();
             }
+            else{
+                $data['message'] = "Incorrect username and password combination";
+            }
         }
 
         $data['csrf_token'] = Csrf::makeToken();
