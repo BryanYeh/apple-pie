@@ -236,6 +236,33 @@ class Auth extends Controller
         if (!$this->auth->isLogged())
             Url::redirect('login');
 
+        if(isset($_POST['submit'])){
+
+            // Check to make sure the csrf token is good
+            if (Csrf::isTokenValid()) {
+                // Catch password inputs using the Request helper
+
+                $newEmail = Request::post('newEmail');
+                $username = $this->auth->currentSessionInfo()['username'];
+
+                // Run the Activation script
+                if($this->auth->changeEmail($username, $newEmail)){
+                    $data['message'] = "Your email has been changed to {$newEmail}.";
+                    $data['type'] = "success";
+                }
+                else{
+                    $data['message'] = "An error occurred while changing your email.";
+                    $data['type'] = "error";
+                }
+            }
+        }
+
+        $data['csrf_token'] = Csrf::makeToken();
+        $data['title'] = 'Change Email';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        View::renderTemplate('header', $data);
+        View::renderTemplate('email-change', $data);
+        View::renderTemplate('footer', $data);
     }
 
     /**

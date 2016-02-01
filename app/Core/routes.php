@@ -26,7 +26,7 @@ Router::any('forgot-password', 'Controllers\Auth@forgotEmail');
 Router::any('reset-password', 'Controllers\Auth@resetPassword');
 Router::any('change-password', 'Controllers\Auth@changePassword');
 Router::any('resend-activation-email', 'Controllers\Auth@resendActivation');
-
+Router::any('change-email', 'Controllers\Auth@changeEmail');
 
 
 
