@@ -29,7 +29,7 @@ class Auth extends Controller
             $u_id = $this->auth->currentSessionInfo()['uid'];
             $this->user->update($u_id);
         }
-        
+
         $this->user->cleanOfflineUsers();
 
     }
