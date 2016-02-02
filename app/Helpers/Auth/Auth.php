@@ -940,6 +940,12 @@ class Auth {
         return $this->authorize->getAccountInfoEmail($email);
     }
 
+    /**
+     * Resends email verification
+     * @param $email
+     * @return bool
+     * @throws \Helpers\PhpMailer\phpmailerException
+     */
     public function resendActivation($email)
     {
         if (!Cookie::get('auth_session')) {
@@ -997,4 +1003,15 @@ class Auth {
             return false;
         }
     }
+
+    /**
+     * Update given field in users table
+     * @param $data
+     * @param $where
+     * @return int
+     */
+    public function updateUser($data,$where){
+        return $this->authorize->updateInDB('users',$data,$where);
+    }
+
 }

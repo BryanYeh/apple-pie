@@ -8,24 +8,29 @@ use Core\Controller,
     Helpers\Auth\Auth as AuthHelper,
     Helpers\Csrf,
     Helpers\Url,
-    Helpers\Request;
+    Helpers\Request,
+    Models\Users;
 
 
 class Auth extends Controller
 {
 
     private $auth;
+    private $user;
 
     public function __construct()
     {
         parent::__construct();
         $this->language->load('Welcome');
         $this->auth = new AuthHelper();
+        $this->user = new  Users();
 
         if ($this->auth->isLogged()) {
             $u_id = $this->auth->currentSessionInfo()['uid'];
-            //put the user in the online table using $u_id
+            $this->user->update($u_id);
         }
+        
+        $this->user->cleanOfflineUsers();
 
     }
 
@@ -42,10 +47,26 @@ class Auth extends Controller
             $password = Request::post('password');
             $rememberMe = Request::post('rememberMe');
 
+            /**
+             * TODO: Do something to extend the life of the cookie with $rememberMe
+             */
+
             $email = $this->auth->checkIfEmail($username);
             $username = count($email) != 0 ? $email[0]->username : $username;
 
             if ($this->auth->login($username, $password)) {
+                $userId = $this->auth->currentSessionInfo()['uid'];
+
+                $info = array('LastLogin' => date('Y-m-d G:i:s'));
+                $where = array('userID' => $userId);
+                $this->auth->updateUser($info,$where);
+
+                $this->user->update($userId);
+
+                /**
+                 * TODO: return to previous page before log in, if none go home page
+                 */
+
                 Url::redirect();
             }
             else{
@@ -68,7 +89,7 @@ class Auth extends Controller
     {
         if ($this->auth->isLogged()) {
             $u_id = $this->auth->currentSessionInfo()['uid'];
-            //remove the user from the online table using $u_id
+            $this->user->remove($u_id);
             $this->auth->logout();
         }
         Url::redirect();

@@ -220,4 +220,13 @@ class Database extends PDO
     {
         return $this->exec("TRUNCATE TABLE $table");
     }
+
+    // Open sql delete function
+    public function delete_open($sql)
+    {
+        $stmt = $this->prepare("DELETE FROM $sql");
+
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
 }
