@@ -24,12 +24,13 @@ class Auth {
     }
 
     /**
-     * Log user in via MySQL Database 
+     * Log user in via MySQL Database
      * @param string $username
      * @param string $password
-     * @return boolean
+     * @param $remember
+     * @return bool
      */
-    public function login($username, $password) {
+    public function login($username, $password,$remember) {
         if (!Cookie::get("auth_session")) {
             $attcount = $this->getAttempt($_SERVER['REMOTE_ADDR']);
 
@@ -82,7 +83,7 @@ class Auth {
                             return false;
                         } else {
                             // Account is activated
-                            $this->newSession($username); //generate new cookie session
+                            $this->newSession($username,$remember); //generate new cookie session
                             $this->logActivity($username, "AUTH_LOGIN_SUCCESS", "User logged in");
                             $this->successmsg[] = $this->lang['login_success'];
                             return true;
@@ -256,10 +257,11 @@ class Auth {
     }
 
     /**
-     * Creates a new session for the provided username and sets cookie 
+     * Creates a new session for the provided username and sets cookie
      * @param string $username
+     * @param bool $rememberMe
      */
-    private function newSession($username) {
+    private function newSession($username,$rememberMe) {
         $hash = md5(microtime()); // unique session hash
         // Fetch User ID :		
         $queryUid = $this->authorize->getUserID($username);
@@ -267,7 +269,7 @@ class Auth {
         // Delete all previous sessions :
         $this->authorize->deleteSession($username);
         $ip = $_SERVER['REMOTE_ADDR'];
-        $expiredate = date("Y-m-d H:i:s", strtotime(SESSION_DURATION));
+        $expiredate = $rememberMe ? date("Y-m-d H:i:s", strtotime(SESSION_DURATION_RM)) : date("Y-m-d H:i:s", strtotime(SESSION_DURATION));
         $expiretime = strtotime($expiredate);
         $info = array("uid" => $uid, "username" => $username, "hash" => $hash, "expiredate" => $expiredate, "ip" => $ip);
         $this->authorize->addIntoDB("sessions", $info);
@@ -440,13 +442,14 @@ class Auth {
                         $this->authorize->addIntoDB("users", $info);
                         //EMAIL MESSAGE USING PHPMAILER
                         $mail = new \Helpers\PhpMailer\Mail();
-                        $mail->setFrom(EMAIL_FROM);
                         $mail->addAddress($email);
-                        $mail->subject(SITE_NAME);
+                        $mail->subject(SITETITLE. " - EMAIL VERIFICATION");
                         $body = "Hello {$username}<br/><br/>";
-                        $body .= "You recently registered a new account on ".SITE_NAME."<br/>";
+                        $body .= "You recently registered a new account on ".SITETITLE."<br/>";
                         $body .= "To activate your account please click the following link<br/><br/>";
                         $body .= "<b><a href='".BASE_URL.ACTIVATION_ROUTE."/username/{$username}/key/{$activekey}'>Activate my account</a></b>";
+                        $body .= "<br><br> You May Copy and Paste this URL in your Browser Address Bar: <br>";
+                        $body .= BASE_URL.ACTIVATION_ROUTE."/username/{$username}/key/{$activekey}";
                         $mail->body($body);
                         $mail->send();
                         $this->logActivity($username, "AUTH_REGISTER_SUCCESS", "Account created and activation email sent");
@@ -754,13 +757,12 @@ class Auth {
 
                     //EMAIL MESSAGE USING PHPMAILER
                     $mail = new \Helpers\PhpMailer\Mail();
-                    $mail->setFrom(EMAIL_FROM);
                     $mail->addAddress($email);
-                    $mail->subject(SITE_NAME . " - Password reset request !");
+                    $mail->subject(SITETITLE . " - Password reset request !");
                     $body = "Hello {$username}<br/><br/>";
                     $body .= "You recently requested a password reset on " . SITE_NAME . "<br/>";
                     $body .= "To proceed with the password reset, please click the following link :<br/><br/>";
-                    $body .= "<b><a href='{BASE_URL}{RESET_PASSWORD_ROUTE}?username={$username}&key={$resetkey}'>Reset My Password</a></b>";
+                    $body .= "<b><a href='".BASE_URL.RESET_PASSWORD_ROUTE."?username={$username}&key={$resetkey}'>Reset My Password</a></b>";
                     $mail->body($body);
                     $mail->send();
                     $this->logActivity($username, "AUTH_RESETPASS_SUCCESS", "Reset pass request sent to {$email} ( Key : {$resetkey} )");
@@ -974,12 +976,10 @@ class Auth {
                     $this->authorize->updateInDB('users',$info,$where);
                     //EMAIL MESSAGE USING PHPMAILER
                     $mail = new \Helpers\PhpMailer\Mail();
-                    $mail->setFrom(EMAIL_FROM);
                     $mail->addAddress($email);
-                    $subject = " " . SITE_NAME . " - Account Activation Link";
-                    $mail->subject($subject);
+                    $mail->subject(SITETITLE . " - Account Activation Link");
                     $body = "Hello {$username}<br/><br/>";
-                    $body .= "You recently registered a new account on " . SITE_NAME . "<br/>";
+                    $body .= "You recently registered a new account on " . SITETITLE . "<br/>";
                     $body .= "To activate your account please click the following link<br/><br/>";
                     $body .= "<b><a href='".BASE_URL.ACTIVATION_ROUTE."/username/{$username}/key/{$activekey}'>Activate my account</a></b>";
                     $body .= "<br><br> You May Copy and Paste this URL in your Browser Address Bar: <br>";

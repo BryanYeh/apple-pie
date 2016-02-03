@@ -470,4 +470,4 @@ $lang['de']['logactivity_action_long'] = "Es ist ein Fehler aufgetreten.";
 $lang['de']['logactivity_addinfo_long'] = "Es ist ein Fehler aufgetreten.";
 
 
-return $lang[LOC];
+return $lang[LANGUAGE_CODE];

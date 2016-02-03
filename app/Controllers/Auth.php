@@ -23,7 +23,7 @@ class Auth extends Controller
         parent::__construct();
         $this->language->load('Welcome');
         $this->auth = new AuthHelper();
-        $this->user = new  Users();
+        $this->user = new Users();
 
         if ($this->auth->isLogged()) {
             $u_id = $this->auth->currentSessionInfo()['uid'];
@@ -45,16 +45,13 @@ class Auth extends Controller
         if (isset($_POST['submit']) && Csrf::isTokenValid()) {
             $username = Request::post('username');
             $password = Request::post('password');
-            $rememberMe = Request::post('rememberMe');
-
-            /**
-             * TODO: Do something to extend the life of the cookie with $rememberMe
-             */
+            //$rememberMe = Request::post('rememberMe');
+            $rememberMe = null !=  Request::post('rememberMe');
 
             $email = $this->auth->checkIfEmail($username);
             $username = count($email) != 0 ? $email[0]->username : $username;
 
-            if ($this->auth->login($username, $password)) {
+            if ($this->auth->login($username, $password, $rememberMe)) {
                 $userId = $this->auth->currentSessionInfo()['uid'];
 
                 $info = array('LastLogin' => date('Y-m-d G:i:s'));
