@@ -30,7 +30,7 @@ class Config
         ob_start();
 
         /**
-         * Define relative base path.
+         * Relative base path.
          */
         define('DIR', '/');
 
@@ -47,101 +47,116 @@ class Config
 
         /**
          * Set a default language.
+         * Auth Languages availables: en / fr / de / es
+         * Other available languages: cs / it / nl / pl / ro / ru
+         *      (will cause error if set to any of these since Auth languages uses this,
+         *       unless you add in the translations yourself to Helpers/Auth/Lang.php)
          */
         define('LANGUAGE_CODE', 'en');
 
-        //database details ONLY NEEDED IF USING A DATABASE
-
         /**
-         * Database engine default is mysql.
+         * Site and Email Title
          */
-        define('DB_TYPE', 'mysql');
-
-        /**
-         * Database host default is localhost.
-         */
-        define('DB_HOST', 'localhost');
-
-        /**
-         * Database name.
-         */
-        define('DB_NAME', 'dbname');
-
-        /**
-         * Database username.
-         */
-        define('DB_USER', 'username');
-
-        /**
-         * Database password.
-         */
-        define('DB_PASS', 'password');
-
-        /**
-         * PREFER to be used in database calls default is smvc_
-         */
-        define('PREFIX', 'uap_');
+        define('SITETITLE', 'V2.2');
 
         /**
          * Set prefix for sessions.
          */
         define('SESSION_PREFIX', 'uap_');
 
-        /**
-         * Optional create a constant for the name of the site.
-         */
-        define('SITETITLE', 'V2.2');
 
-        /**
-         * Optionall set a site email address.
-         */
-        //define('SITEEMAIL', '');
+        /********************
+         *                  *
+         *     DATABASE     *
+         *                  *
+         ********************/
 
-        /**
-         * Turn on custom error handling.
-         */
-        set_exception_handler('Core\Logger::ExceptionHandler');
-        set_error_handler('Core\Logger::ErrorHandler');
+        // Database engine default is mysql.
+        define('DB_TYPE', 'mysql');
 
-        /**
-         * Set timezone.
-         */
-        date_default_timezone_set('Europe/London');
+        // Database host default is localhost.
+        define('DB_HOST', 'localhost');
 
-        /**
-         * reCAPTCHA keys
-         */
-        define("RECAP_PUBLIC_KEY", ''); // reCAPCHA site key
-        define("RECAP_PRIVATE_KEY", ''); // reCAPCHA secret key
+        // Database name
+        define('DB_NAME', 'dbname');
+
+        // Database username
+        define('DB_USER', 'dbusername');
+
+        // Database password
+        define('DB_PASS', 'dbpassword');
+
+        // PREFIX to be used before each table name
+        define('PREFIX', 'uap_');
 
 
 
-        /**
-         * Auth Helpers necessities
-         */
-        // Name of website to appear in emails
-        define("SITE_NAME", "Test");
+        /********************
+         *                  *
+         *      EMAIL       *
+         *     uses SMTP    *
+         ********************/
+        // Email's email
+        define('EMAIL_USERNAME', 'email@domain.com');
 
-        // Email FROM address for Auth emails (Activation, password reset...)
-        define("EMAIL_FROM", "someemail@email.com");
+        // Email's password
+        define('EMAIL_PASSWORD', 'passw0rd');
 
-        // INT : Max number of attempts for login before user is locked out
+        // Email sent from whom? a name
+        define('EMAIL_FROM_NAME','George Lopez');
+
+        // Email host
+        // Example : Google (smtp.gmail.com), Yahoo (smtp.mail.yahoo.com)
+        define('EMAIL_HOST','smtp.gmail.com');
+
+        // Email port
+        // default : 25 (https://www.arclab.com/en/kb/email/list-of-smtp-and-pop3-servers-mailserver-list.html)
+        define('EMAIL_PORT', 25);
+
+        // Email authentication
+        // default : ssl
+        // choices : ssl, tls, (leave it empty)
+        define('EMAIL_STMP_SECURE','ssl');
+
+
+
+        /********************
+         *                  *
+         *     RECAPTCHA    *
+         *                  *
+         ********************/
+        // reCAPCHA site key provided by google for testing purposes
+        define("RECAP_PUBLIC_KEY", '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI');
+        // reCAPCHA secret key provided by google for testing purposes
+        define("RECAP_PRIVATE_KEY", '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
+
+
+
+        /*****************
+         *                *
+         *     Account    *
+         *                *
+         *****************/
+        // Account needs email activation, false=no true=yes
+        define("ACCOUNT_ACTIVATION",false);
+
+        // Max attempts for login before user is locked out
         define("MAX_ATTEMPTS", 5);
 
         // URL to Auth Class installation root WITH trailing slash
-        define("BASE_URL", "http://localhost/");
+        define("BASE_URL", "http://127.0.0.1/");
 
         // Account activation route
         define("ACTIVATION_ROUTE", 'activate');
 
-        // Account needs email activation, false=no true=yes
-        define("ACCOUNT_ACTIVATION",false);
-
         // Account password reset route
         define("RESET_PASSWORD_ROUTE", 'resetpassword');
 
-        //How long a session lasts : Default = +1 month
-        define("SESSION_DURATION", "+1 month");
+        //How long a session lasts : Default = +1 day
+        define("SESSION_DURATION", "+1 day");
+
+        //How long a REMEMBER ME SESSION lasts : Default = +1 month
+        define("SESSION_DURATION_RM", "+1 month");
 
         //Max attempts for logging in
         define("SECURITY_DURATION", "+5 minutes");
@@ -151,9 +166,6 @@ class Config
 
         //INT hash length of BCRYPT algorithm
         define("HASH_LENGTH", 22);
-
-        // Language of Auth Class output : en / fr /es / de
-        define("LOC", "es");
 
         // min length of username
         define('MIN_USERNAME_LENGTH', 5);
@@ -179,6 +191,20 @@ class Config
         $waittime = preg_replace("/[^0-9]/", "", SECURITY_DURATION); //DO NOT MODIFY
         // this is the same as SECURITY_DURATION but in number format
         define('WAIT_TIME', $waittime); //DO NOT MODIFY
+
+
+
+        /**
+         * Turn on custom error handling.
+         */
+        set_exception_handler('Core\Logger::ExceptionHandler');
+        set_error_handler('Core\Logger::ErrorHandler');
+
+        /**
+         * Set timezone.
+         */
+        date_default_timezone_set('America/Los_Angeles');
+
 
         /**
          * Start sessions.
