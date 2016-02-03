@@ -15,19 +15,17 @@ use Helpers\Hooks;
 Router::any('', 'Controllers\Welcome@index');
 Router::any('subpage', 'Controllers\Welcome@subPage');
 
-Router::any('login', 'Controllers\Auth@login');
-Router::any('logout', 'Controllers\Auth@logout');
 Router::any('register', 'Controllers\Auth@register');
 Router::any('activate/username/(:any)/key/(:any)', 'Controllers\Auth@activate');
-Router::any('settings', 'Controllers\Auth@settings');
-Router::any('edit-password', 'Controllers\Auth@changePassword');
-Router::any('edit-email', 'Controllers\Auth@changeEmail');
 Router::any('forgot-password', 'Controllers\Auth@forgotEmail');
 Router::any('reset-password', 'Controllers\Auth@resetPassword');
-Router::any('change-password', 'Controllers\Auth@changePassword');
 Router::any('resend-activation-email', 'Controllers\Auth@resendActivation');
-Router::any('change-email', 'Controllers\Auth@changeEmail');
 
+Router::any('login', 'Controllers\Auth@login');
+Router::any('logout', 'Controllers\Auth@logout');
+Router::any('settings', 'Controllers\Auth@settings');
+Router::any('change-email', 'Controllers\Auth@changeEmail');
+Router::any('change-password', 'Controllers\Auth@changePassword');
 
 
 /** Module routes. */
