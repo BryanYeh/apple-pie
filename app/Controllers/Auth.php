@@ -219,9 +219,7 @@ class Auth extends Controller
 
         if(isset($_POST['submit'])){
 
-            // Check to make sure the csrf token is good
             if (Csrf::isTokenValid()) {
-                // Catch password inputs using the Request helper
                 $currentPassword = Request::post('currentPassword');
                 $newPassword = Request::post('newPassword');
                 $confirmPassword = Request::post('confirmPassword');
@@ -229,7 +227,6 @@ class Auth extends Controller
                 // Get Current User's UserName
                 $u_username = $this->auth->currentSessionInfo()['username'];
 
-                // Run the Activation script
                 if($this->auth->changePass($u_username, $currentPassword, $newPassword, $confirmPassword)){
                     $data['message'] = "Your password has been changed.";
                     $data['type'] = "success";
@@ -259,14 +256,10 @@ class Auth extends Controller
 
         if(isset($_POST['submit'])){
 
-            // Check to make sure the csrf token is good
-            if (Csrf::isTokenValid()) {
-                // Catch password inputs using the Request helper
-
+            if(Csrf::isTokenValid()) {
                 $newEmail = Request::post('newEmail');
                 $username = $this->auth->currentSessionInfo()['username'];
 
-                // Run the Activation script
                 if($this->auth->changeEmail($username, $newEmail)){
                     $data['message'] = "Your email has been changed to {$newEmail}.";
                     $data['type'] = "success";
@@ -291,19 +284,70 @@ class Auth extends Controller
      */
     public function forgotPassword()
     {
-        if ($this->auth->isLogged())
+        if($this->auth->isLogged())
             Url::redirect();
 
+        if(isset($_POST['submit'])){
+
+            if (Csrf::isTokenValid()) {
+                $email = Request::post('email');
+
+                if($this->auth->resetPass($email)){
+                    $data['message'] = "A link has been sent to your email to reset your password";
+                    $data['type'] = "success";
+                }else{
+                    $data['message'] = "No email is affiliated with any accounts on this website.";
+                    $data['type'] = "error";
+                }
+            }
+        }
+
+        $data['title'] = "Forgot Password";
+        $data['csrf_token'] = Csrf::makeToken();
+
+        View::renderTemplate('header', $data);
+        View::renderTemplate('resend', $data);
+        View::renderTemplate('footer', $data);
     }
 
     /**
      * Reset password
+     * @param $username
+     * @param $resetkey
      */
-    public function resetPassword()
+    public function resetPassword($username,$resetkey)
     {
-        if ($this->auth->isLogged())
+        if($this->auth->isLogged())
             Url::redirect('login');
 
+        if($this->auth->checkResetKey($username, $resetkey)){
+            if(isset($_POST['submit'])){
+                if (Csrf::isTokenValid()) {
+                    $password = Request::post('password');
+                    $confirm_password = Request::post('confirmPassword');
+
+                    if($this->auth->resetPass('', $username, $resetkey, $password, $confirm_password)){
+                        $data['message'] = "Your password has been changed, make sure to keep your password somewhere safe.";
+                        $data['type'] = "success";
+                    }
+                    else{
+                        $data['message'] = "Some error occurred, please try again.";
+                        $data['type'] = "error";
+                    }
+                }
+            }
+        }
+        else{
+            $data['message'] = "Some Error Occurred";
+            $data['type'] = "error";
+        }
+
+        $data['title'] = "Reset Password";
+        $data['csrf_token'] = Csrf::makeToken();
+
+        View::renderTemplate('header', $data);
+        View::renderTemplate('password_reset', $data);
+        View::renderTemplate('footer', $data);
     }
 
     /**
@@ -316,6 +360,7 @@ class Auth extends Controller
 
         if (isset($_POST['submit']) && Csrf::isTokenValid()) {
             $email = Request::post('email');
+
             if($this->auth->resendActivation($email)){
                 $data['message'] = "An activation code has been sent to your email";
                 $data['type'] = "success";
