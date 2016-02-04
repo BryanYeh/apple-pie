@@ -760,9 +760,9 @@ class Auth {
                     $mail->addAddress($email);
                     $mail->subject(SITETITLE . " - Password reset request !");
                     $body = "Hello {$username}<br/><br/>";
-                    $body .= "You recently requested a password reset on " . SITE_NAME . "<br/>";
+                    $body .= "You recently requested a password reset on " . SITETITLE . "<br/>";
                     $body .= "To proceed with the password reset, please click the following link :<br/><br/>";
-                    $body .= "<b><a href='".BASE_URL.RESET_PASSWORD_ROUTE."?username={$username}&key={$resetkey}'>Reset My Password</a></b>";
+                    $body .= "<b><a href='".BASE_URL.RESET_PASSWORD_ROUTE."/username/{$username}/key/{$resetkey}'>Reset My Password</a></b>";
                     $mail->body($body);
                     $mail->send();
                     $this->logActivity($username, "AUTH_RESETPASS_SUCCESS", "Reset pass request sent to {$email} ( Key : {$resetkey} )");
