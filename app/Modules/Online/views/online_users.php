@@ -4,7 +4,7 @@
             <h3>Users Status</h3>
         </div>
         <ul class="list-group">
-            <li class="list-group-item">Members: <?php echo $data['activatedAccounts']; ?></li>
+            <li class="list-group-item"><a href="<?php echo DIR; ?>members">Members: <?php echo $data['activatedAccounts']; ?></a></li>
             <li class="list-group-item">Members Online: <?php echo $data['onlineAccounts']; ?></li>
         </ul>
     </div>

@@ -36,4 +36,21 @@ class Online extends Controller
         View::renderModule('Online/views/online_users',$data);
     }
 
+    public function routes()
+    {
+        Router::any('members','Modules\Online\Controllers\Online@members');
+    }
+
+    public function members()
+    {
+        $onlineUsers = new OnlineUser();
+        $data['title'] = 'Members';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        $data['members'] = $onlineUsers->getMembers();
+
+        View::renderTemplate('header', $data);
+        View::renderModule('Online/views/members', $data);
+        View::renderTemplate('footer', $data);
+    }
+
 }
