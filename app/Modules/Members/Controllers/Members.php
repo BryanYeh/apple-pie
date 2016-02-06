@@ -1,14 +1,14 @@
 <?php
-namespace Modules\Online\Controllers;
+namespace Modules\Members\Controllers;
 
 use Core\Controller,
     Core\View,
     Core\Router,
     Helpers\Auth\Auth as AuthHelper,
     Models\Users,
-    Modules\Online\Models\Online as OnlineUser;
+    Modules\Members\Models\Members as MembersModel;
 
-class Online extends Controller
+class Members extends Controller
 {
     private $auth;
     private $user;
@@ -29,27 +29,27 @@ class Online extends Controller
 
     public function index()
     {
-        $onlineUsers = new OnlineUser();
+        $onlineUsers = new MembersModel();
         $data['activatedAccounts'] = count($onlineUsers->getActivatedAccounts());
         $data['onlineAccounts'] = count($onlineUsers->getOnlineAccounts());
 
-        View::renderModule('Online/views/online_users',$data);
+        View::renderModule('Members/views/online_users',$data);
     }
 
     public function routes()
     {
-        Router::any('members','Modules\Online\Controllers\Online@members');
+        Router::any('members','Modules\Members\Controllers\Members@members');
     }
 
     public function members()
     {
-        $onlineUsers = new OnlineUser();
+        $onlineUsers = new MembersModel();
         $data['title'] = 'Members';
         $data['isLoggedIn'] = $this->auth->isLogged();
         $data['members'] = $onlineUsers->getMembers();
 
         View::renderTemplate('header', $data);
-        View::renderModule('Online/views/members', $data);
+        View::renderModule('Members/views/members', $data);
         View::renderTemplate('footer', $data);
     }
 

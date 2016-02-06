@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Modules\Online\Models;
+namespace Modules\Members\Models;
 
 
 use Core\Model;
 
-class Online extends Model
+class Members extends Model
 {
     public function getActivatedAccounts()
     {
