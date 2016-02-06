@@ -1,9 +1,10 @@
 <?php
-/**
- * Sample layout
- */
 
-use Core\Language;
+use Core\Language,
+	Helpers\Hooks;
+
+//initialise hooks
+$hooks = Hooks::get();
 
 ?>
 
@@ -16,3 +17,6 @@ use Core\Language;
 <a class="btn btn-md btn-success" href="<?php echo DIR;?>subpage">
 	<?php echo Language::show('open_subpage', 'Welcome'); ?>
 </a>
+<?php
+$hooks->run('sidebar');
+?>

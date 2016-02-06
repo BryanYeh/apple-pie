@@ -55,7 +55,8 @@ class Hooks
             'afterBody',
             'footer',
             'js',
-            'routes'
+            'routes',
+            'sidebar'
         ));
 
         //load modules
