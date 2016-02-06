@@ -12,8 +12,8 @@ use Core\Router;
 use Helpers\Hooks;
 
 /** Define routes. */
-Router::any('', 'Controllers\Welcome@index');
-Router::any('subpage', 'Controllers\Welcome@subPage');
+Router::any('', 'Controllers\Home@index');
+Router::any('subpage', 'Controllers\Home@subPage');
 
 Router::any('register', 'Controllers\Auth@register');
 Router::any('activate/username/(:any)/key/(:any)', 'Controllers\Auth@activate');
