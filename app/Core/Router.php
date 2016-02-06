@@ -79,9 +79,18 @@ class Router
         $uri = dirname($_SERVER['PHP_SELF']).'/'.$params[0];
         $callback = $params[1];
 
-        array_push(self::$routes, $uri);
-        array_push(self::$methods, strtoupper($method));
-        array_push(self::$callbacks, $callback);
+        $index = array_search($uri,self::$routes);
+        if($index==false){
+            array_push(self::$routes, $uri);
+            array_push(self::$methods, strtoupper($method));
+            array_push(self::$callbacks, $callback);
+        }
+        else{
+            self::$callbacks[$index] = $callback;
+            if(self::$methods[$index] != strtoupper($method))
+                self::$methods[$index] = strtoupper($method);
+        }
+
     }
 
     /**
