@@ -39,6 +39,7 @@ class Members extends Controller
     public function routes()
     {
         Router::any('members','Modules\Members\Controllers\Members@members');
+        Router::any('online-members','Modules\Members\Controllers\Members@online');
     }
 
     public function members()
@@ -53,4 +54,15 @@ class Members extends Controller
         View::renderTemplate('footer', $data);
     }
 
+    public function online()
+    {
+        $onlineUsers = new MembersModel();
+        $data['title'] = 'Members';
+        $data['isLoggedIn'] = $this->auth->isLogged();
+        $data['members'] = $onlineUsers->getOnlineMembers();
+
+        View::renderTemplate('header', $data);
+        View::renderModule('Members/views/members', $data);
+        View::renderTemplate('footer', $data);
+    }
 }

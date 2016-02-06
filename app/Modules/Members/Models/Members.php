@@ -45,7 +45,36 @@ class Members extends Model
 				GROUP BY
 					u.userID
 				ORDER BY
-					u.userID ASC, g.groupID DESC
-		");
+					u.userID ASC, g.groupID DESC");
+    }
+
+    public function getOnlineMembers(){
+        return $this->db->select("
+				SELECT
+					u.userID,
+					u.username,
+					u.firstName,
+					uo.userID,
+					ug.userID,
+					ug.groupID,
+					g.groupID,
+					g.groupName,
+					g.groupFontColor,
+					g.groupFontWeight
+				FROM
+					uap_users_online uo
+				LEFT JOIN
+					uap_users u
+					ON u.userID = uo.userID
+				LEFT JOIN
+					uap_users_groups ug
+					ON uo.userID = ug.userID
+				LEFT JOIN
+					uap_groups g
+					ON ug.groupID = g.groupID
+				GROUP BY
+					u.userID
+				ORDER BY
+					u.userID ASC, g.groupID DESC");
     }
 }

@@ -5,7 +5,7 @@
         </div>
         <ul class="list-group">
             <li class="list-group-item"><a href="<?php echo DIR; ?>members">Members: <?php echo $data['activatedAccounts']; ?></a></li>
-            <li class="list-group-item">Members Online: <?php echo $data['onlineAccounts']; ?></li>
+            <li class="list-group-item"><a href="<?php echo DIR; ?>online-members">Members Online: <?php echo $data['onlineAccounts']; ?></a></li>
         </ul>
     </div>
 </div>
