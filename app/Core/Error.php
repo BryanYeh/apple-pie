@@ -72,4 +72,13 @@ class Error extends Controller
             }
         }
     }
+
+    /*
+     * Create 404 error
+     */
+    public static function error404(){
+        $c = new self('404 Page Not Found');
+        $c->index();
+        exit();
+    }
 }

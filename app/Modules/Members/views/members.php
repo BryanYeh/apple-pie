@@ -18,7 +18,10 @@ $hooks = Hooks::get();
     <tbody>
     <?php
         foreach($data['members'] as $member){
-            echo "<tr><td>{$member->username}</td><td>{$member->firstName}</td><td class='color {$member->groupFontColor}'>{$member->groupName}</td></tr>";
+            echo "<tr>
+                    <td><a href='".DIR."profile/{$member->username}'> {$member->username}</a></td>
+                    <td>{$member->firstName}</td>
+                    <td class='color {$member->groupFontColor}'>{$member->groupName}</td></tr>";
         }
     ?>
     </tbody>

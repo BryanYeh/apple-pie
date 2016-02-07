@@ -4,9 +4,11 @@ namespace Modules\Members\Controllers;
 use Core\Controller,
     Core\View,
     Core\Router,
+    Core\Error,
     Helpers\Auth\Auth as AuthHelper,
     Models\Users,
     Modules\Members\Models\Members as MembersModel;
+
 
 class Members extends Controller
 {
@@ -27,6 +29,20 @@ class Members extends Controller
         $this->user->cleanOfflineUsers();
     }
 
+    /**
+     * Routes for this Members Module
+     */
+    public function routes()
+    {
+        Router::any('members','Modules\Members\Controllers\Members@members');
+        Router::any('online-members','Modules\Members\Controllers\Members@online');
+        Router::any('profile/(:any)','Modules\Members\Controllers\Members@viewProfile');
+        Router::any('edit-profile/(:any)','Modules\Members\Controllers\Members@editProfile');
+    }
+
+    /**
+     * Part of page for Member status
+     */
     public function index()
     {
         $onlineUsers = new MembersModel();
@@ -36,12 +52,10 @@ class Members extends Controller
         View::renderModule('Members/views/online_users',$data);
     }
 
-    public function routes()
-    {
-        Router::any('members','Modules\Members\Controllers\Members@members');
-        Router::any('online-members','Modules\Members\Controllers\Members@online');
-    }
 
+    /**
+     * Page for list of activated accounts
+     */
     public function members()
     {
         $onlineUsers = new MembersModel();
@@ -54,6 +68,9 @@ class Members extends Controller
         View::renderTemplate('footer', $data);
     }
 
+    /**
+     * Page for list of online accounts
+     */
     public function online()
     {
         $onlineUsers = new MembersModel();
@@ -64,5 +81,24 @@ class Members extends Controller
         View::renderTemplate('header', $data);
         View::renderModule('Members/views/members', $data);
         View::renderTemplate('footer', $data);
+    }
+
+    /**
+     * Get profile by username
+     * @param $username
+     */
+    public function viewProfile($username)
+    {
+        $onlineUsers = new MembersModel();
+        $profile = $onlineUsers->getUserProfile($username);
+        if(sizeof($profile)>0){
+            $data['title'] = $username . "'s Profile";
+            $data['profile'] = $profile[0];
+            View::renderTemplate('header', $data);
+            View::renderModule('Members/views/view_profile', $data);
+            View::renderTemplate('footer', $data);
+        }
+        else
+            Error::error404();
     }
 }

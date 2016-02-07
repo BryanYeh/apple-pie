@@ -48,7 +48,8 @@ class Members extends Model
 					u.userID ASC, g.groupID DESC");
     }
 
-    public function getOnlineMembers(){
+    public function getOnlineMembers()
+    {
         return $this->db->select("
 				SELECT
 					u.userID,
@@ -76,5 +77,26 @@ class Members extends Model
 					u.userID
 				ORDER BY
 					u.userID ASC, g.groupID DESC");
+    }
+
+    public function getUserProfile($username)
+    {
+        return $this->db->select("
+					SELECT
+						u.userID,
+						u.username,
+						u.firstName,
+						u.gender,
+						u.userImage,
+						u.LastLogin,
+						u.SignUp,
+						ue.userID,
+						ue.website,
+						ue.aboutme
+					FROM " . PREFIX . "users u
+					LEFT JOIN " . PREFIX . "users_extprofile ue
+						ON u.userID = ue.userID
+					WHERE u.username = :username",
+            array(':username' => $username));
     }
 }
