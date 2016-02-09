@@ -359,8 +359,11 @@ class Auth {
                         $password = $this->hashPass($password);
                         $activekey = $this->randomKey(RANDOM_KEY_LENGTH); //genera una randomkey para activacion enviar por email
                         $info = array("username" => $username, "password" => $password, "email" => $email, "activekey" => $activekey);
-                        $this->authorize->addIntoDB("users", $info);
-                        //$last_insert_id = $this->db->lastInsertId('id');
+                        $user_id = $this->authorize->addIntoDB("users", $info);
+
+                        $info = array('userID' => $user_id, 'groupID' => 1);
+                        $this->authorize->addIntoDB("users_groups",$info);
+
                         $this->logActivity($username, "AUTH_REGISTER_SUCCESS", "Account created");
                         $this->successmsg[] = $this->lang['register_success'];
                         //activar usuario directamente
@@ -439,7 +442,10 @@ class Auth {
                         $password = $this->hashPass($password);
                         $activekey = $this->randomKey(RANDOM_KEY_LENGTH);
                         $info = array("username" => $username, "password" => $password, "email" => $email, "activekey" => $activekey);
-                        $this->authorize->addIntoDB("users", $info);
+                        $user_id = $this->authorize->addIntoDB("users", $info);
+
+                        $info = array('userID' => $user_id, 'groupID' => 1);
+                        $this->authorize->addIntoDB("users_groups",$info);
                         //EMAIL MESSAGE USING PHPMAILER
                         $mail = new \Helpers\PhpMailer\Mail();
                         $mail->addAddress($email);
