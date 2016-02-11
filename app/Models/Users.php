@@ -16,10 +16,9 @@ class Users extends Model
      */
     public function add($userID)
     {
-		var_dump($userID); 
-		echo "test: userId";
-		$data = array('userId' => $userID ,'lastAccess' => date('Y-m-d G:i:s'));
-		$this->db->insert(PREFIX."users_online",$data);
+$data = array('userID' => $userID ,'lastAccess' => date('Y-m-d G:i:s'));
+var_dump($data);
+var_dump($this->db->insert(PREFIX."users_online",$data));
     }
 
     /**
