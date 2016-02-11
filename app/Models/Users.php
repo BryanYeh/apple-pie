@@ -18,7 +18,7 @@ class Users extends Model
     {
 $data = array('userId' => $userID ,'lastAccess' => date('Y-m-d G:i:s'));
 var_dump($data);
-var_dump($this->db->insert(PREFIX."users_online",$data));
+var_dump($this->db->insert(PREFIX.'users_online',$data));
     }
 
     /**
