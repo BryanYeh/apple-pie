@@ -26,6 +26,7 @@ class Users extends Model
      */
     public function update($userID)
     {
+		var_dump($userID);
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userID = :userID ', array(':userID' => $userID));
         $count = count($query);
 		// test stuff
