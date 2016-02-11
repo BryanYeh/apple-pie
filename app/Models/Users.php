@@ -29,8 +29,10 @@ class Users extends Model
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userID = :userID ', array(':userID' => $userID));
         $count = count($query);
         if($count == 0){
+            var_dump('in the ok');
             self::add($userID);
         }else{
+            var_dump('in the else');
             $data = array('lastAccess' => date('Y-m-d G:i:s'));
             $where = array('userID' => $userID);
             $this->db->update(PREFIX."users_online",$data,$where);
