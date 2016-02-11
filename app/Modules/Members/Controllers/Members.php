@@ -94,6 +94,7 @@ class Members extends Controller
         if(sizeof($profile)>0){
             $data['title'] = $username . "'s Profile";
             $data['profile'] = $profile[0];
+            $data['isLoggedIn'] = $this->auth->isLogged();
             View::renderTemplate('header', $data);
             View::renderModule('Members/views/view_profile', $data);
             View::renderTemplate('footer', $data);
