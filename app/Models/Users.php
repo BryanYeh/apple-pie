@@ -28,6 +28,8 @@ class Users extends Model
     {
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userID = :userID ', array(':userID' => $userID));
         $count = count($query);
+		// test stuff
+		var_dump($count);
         if($count == 0){
             $this->add($userID);
         }else{
