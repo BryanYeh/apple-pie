@@ -14,7 +14,7 @@ class Users extends Model
      * Add user to online table
      * @param $userID
      */
-    private function add($userID)
+    public function add($userID)
     {
         $data = array('userID' => $userID ,'lastAccess' => date('Y-m-d G:i:s'));
         $this->db->insert(PREFIX."users_online",$data);
