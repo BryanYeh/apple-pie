@@ -26,12 +26,10 @@ class Users extends Model
      */
     public function update($userID)
     {
-		var_dump($userID);
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userID = :userID ', array(':userID' => $userID));
         $count = count($query);
-		// test stuff
-		var_dump($count);
         if($count == 0){
+			var_dump($count);var_dump($userID);
             $this->add($userID);
         }else{
             $data = array('lastAccess' => date('Y-m-d G:i:s'));
