@@ -16,6 +16,7 @@ class Users extends Model
      */
     public function add($userID)
     {
+		var_dump($userID);
         $data = array('userID' => $userID ,'lastAccess' => date('Y-m-d G:i:s'));
         $this->db->insert(PREFIX."users_online",$data);
     }
@@ -29,7 +30,6 @@ class Users extends Model
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userID = :userID ', array(':userID' => $userID));
         $count = count($query);
         if($count == 0){
-			var_dump($count);var_dump($userID);
             $this->add($userID);
         }else{
             $data = array('lastAccess' => date('Y-m-d G:i:s'));
