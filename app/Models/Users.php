@@ -17,7 +17,7 @@ class Users extends Model
     public function add($userID)
     {
 		$data = array('userId' => $userID ,'lastAccess' => date('Y-m-d G:i:s'));
-        var_dump($this->db->insert(PREFIX."users_online",$data));
+        $this->db->insert(PREFIX."users_online",$data);
 
     }
 
@@ -30,10 +30,8 @@ class Users extends Model
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userID = :userID ', array(':userID' => $userID));
         $count = count($query);
         if($count == 0){
-            var_dump('in the ok');
             self::add($userID);
         }else{
-            var_dump('in the else');
             $data = array('lastAccess' => date('Y-m-d G:i:s'));
             $where = array('userID' => $userID);
             $this->db->update(PREFIX."users_online",$data,$where);
@@ -63,6 +61,6 @@ class Users extends Model
     }
 
     public function cleanOfflineUsers(){
-        return $this->db->delete_open(PREFIX.'users_online WHERE now() > date_add(lastAccess, interval 1 minute) ');
+        return $this->db->delete_open(PREFIX.'users_online WHERE now() > date_add(lastAccess, interval 30 minute) ');
     }
 }
