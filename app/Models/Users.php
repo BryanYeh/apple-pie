@@ -28,7 +28,7 @@ class Users extends Model
     public function update($userID)
     {
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userId = :userID ', array(':userID' => $userID));
-        echo $query[0];
+        var_dump( $query);
         $count = count($query);
         if($count == 0){
             self::add($userID);
