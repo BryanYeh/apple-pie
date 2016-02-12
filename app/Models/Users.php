@@ -63,7 +63,7 @@ class Users extends Model
     }
 
     public function cleanOfflineUsers(){
-        var_dump($this->db->select("SELECT * FROM ".PREFIX."users_online WHERE unix_timestamp(date_add(lastAccess, interval 1 minute)) > unix_timestamp(now()) "));
+        var_dump($this->db->select("SELECT * FROM ".PREFIX."users_online WHERE unix_timestamp(date_add(lastAccess, interval 1 minute)) < unix_timestamp(now()) "));
         return $this->db->delete_open(PREFIX.'users_online WHERE unix_timestamp(date_add(lastAccess, interval 1 minute)) > unix_timestamp(now()) ');
     }
 }
