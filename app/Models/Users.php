@@ -63,6 +63,6 @@ class Users extends Model
     }
 
     public function cleanOfflineUsers(){
-        return $this->db->delete_open(PREFIX.'users_online WHERE date_add(lastAccess, interval 1 minute) < now() ');
+        return $this->db->delete_open(PREFIX.'users_online WHERE now() > date_add(lastAccess, interval 1 minute) ');
     }
 }
