@@ -26,7 +26,7 @@ class Members extends Controller
             $this->user->update($u_id);
         }
 
-        var_dump($this->user->cleanOfflineUsers());
+        $this->user->cleanOfflineUsers();
     }
 
     /**
