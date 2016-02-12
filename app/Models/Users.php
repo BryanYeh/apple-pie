@@ -33,7 +33,7 @@ class Users extends Model
             self::add($userID);
         }else{
             $data = array('lastAccess' => date('Y-m-d G:i:s'));
-            $where = array('userID' => $userID);
+            $where = array('userId' => $userID);
             $this->db->update(PREFIX."users_online",$data,$where);
         }
     }
