@@ -7,6 +7,7 @@ namespace Models;
  * @package Models
  */
 use Core\Model;
+use DateTime;
 
 class Users extends Model
 {
