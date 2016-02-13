@@ -120,4 +120,9 @@ class Members extends Model
 					WHERE u.username = :username",
             array(':username' => $username));
     }
+
+    public function getUserName($id)
+    {
+        return $this->db->select("SELECT userID,username FROM users WHERE userID=:id",array(":id"=>$id));
+    }
 }

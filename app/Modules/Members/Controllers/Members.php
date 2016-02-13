@@ -102,4 +102,25 @@ class Members extends Controller
         else
             Error::error404();
     }
+
+    public function editProfile()
+    {
+        $u_id = $this->auth->currentSessionInfo()['uid'];
+
+        $onlineUsers = new MembersModel();
+        $username = $onlineUsers->getUserName($u_id);
+        if(sizeof($username) > 0){
+            $username = $username[0]->username;
+            $profile = $onlineUsers->getUserProfile($username);
+            
+            $data['title'] = $username . "'s Profile";
+            $data['profile'] = $profile[0];
+            $data['isLoggedIn'] = $this->auth->isLogged();
+            View::renderTemplate('header', $data);
+            View::renderModule('Members/views/view_profile', $data);
+            View::renderTemplate('footer', $data);
+        }
+        else
+            Error::error404();
+    }
 }
