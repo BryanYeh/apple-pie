@@ -61,8 +61,12 @@ class Users extends Model
         return $this->db->delete(PREFIX.'users_online', array('userId' => $userID));
     }
 
-    public function cleanOfflineUsers(){
-
+    public function cleanOfflineUsers()
+    {
+        $onlines = $this->db->select('SELECT * FROM '.PREFIX.'users_online');
+        foreach($onlines as $online){
+            echo $online->id . " : " . $online->lastAccess . " : " . date_add($online->lastAccess, date_interval_create_from_date_string('2 minute')) . " : " . (date_add($online->lastAccess, date_interval_create_from_date_string('2 minute')) > new DateTime("now")). "<br>";
+        }
         return $this->db->delete_open(PREFIX.'users_online WHERE now() > date_add(lastAccess, interval 30 minute) ');
     }
 }
