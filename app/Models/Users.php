@@ -31,7 +31,7 @@ class Users extends Model
         $query = $this->db->select('SELECT * FROM '.PREFIX.'users_online WHERE userId = :userID ', array(':userID' => $userID));
         $count = count($query);
         if($count == 0){
-            self::add($userID);
+            $this->add($userID);
         }else{
             $data = array('lastAccess' => date('Y-m-d G:i:s'));
             $where = array('userId' => $userID);
@@ -61,6 +61,10 @@ class Users extends Model
         return $this->db->delete(PREFIX.'users_online', array('userId' => $userID));
     }
 
+    /**
+     * Removes users that were 15 minutes inactive and remove them from the table
+     * @return int
+     */
     public function cleanOfflineUsers()
     {
         $removed = 0;

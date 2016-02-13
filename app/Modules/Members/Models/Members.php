@@ -8,16 +8,28 @@ use Core\Model;
 
 class Members extends Model
 {
+    /**
+     * Get all accounts that were activated
+     * @return array
+     */
     public function getActivatedAccounts()
     {
         return $this->db->select('SELECT * FROM '.PREFIX.'users WHERE isactive = true');
     }
 
+    /**
+     * Get all accounts that are on the Online table
+     * @return array
+     */
     public function getOnlineAccounts()
     {
         return $this->db->select('SELECT * FROM '.PREFIX.'users_online ');
     }
 
+    /**
+     * Get all members that are activated with info
+     * @return array
+     */
     public function getMembers()
     {
         return $this->db->select("
@@ -48,6 +60,10 @@ class Members extends Model
 					u.userID ASC, g.groupID DESC");
     }
 
+    /**
+     * Get all info on members that are online
+     * @return array
+     */
     public function getOnlineMembers()
     {
         return $this->db->select("
@@ -79,6 +95,11 @@ class Members extends Model
 					u.userID ASC, g.groupID DESC");
     }
 
+    /**
+     * Get specific user's info
+     * @param $username
+     * @return array
+     */
     public function getUserProfile($username)
     {
         return $this->db->select("
