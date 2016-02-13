@@ -67,7 +67,7 @@ class Users extends Model
         foreach($onlines as $online){
             $format = 'Y-m-d H:i:s';
             $date = DateTime::createFromFormat($format, $online->lastAccess);
-            echo $online->id . " : " . $online->lastAccess . " : <br>"
+            echo $online->id . " : " . $online->lastAccess . " : <br>";
             var_dump(date_add($date, date_interval_create_from_date_string('30 minute')));
             echo "<br>";
             var_dump(date_add($date, date_interval_create_from_date_string('2 minute')) > new DateTime("now"));
