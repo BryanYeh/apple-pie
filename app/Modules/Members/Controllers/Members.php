@@ -112,7 +112,7 @@ class Members extends Controller
         if(sizeof($username) > 0){
             $username = $username[0]->username;
             $profile = $onlineUsers->getUserProfile($username);
-            
+
             $data['title'] = $username . "'s Profile";
             $data['profile'] = $profile[0];
             $data['isLoggedIn'] = $this->auth->isLogged();

@@ -123,6 +123,6 @@ class Members extends Model
 
     public function getUserName($id)
     {
-        return $this->db->select("SELECT userID,username FROM users WHERE userID=:id",array(":id"=>$id));
+        return $this->db->select("SELECT userID,username FROM ".PREFIX."users WHERE userID=:id",array(":id"=>$id));
     }
 }
