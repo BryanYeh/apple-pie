@@ -64,16 +64,16 @@ class Users extends Model
 
     public function cleanOfflineUsers()
     {
+        $removed = 0;
         $onlines = $this->db->select('SELECT * FROM '.PREFIX.'users_online');
         foreach($onlines as $online){
             $format = 'Y-m-d H:i:s';
             $date = DateTime::createFromFormat($format, $online->lastAccess);
-            echo $online->id . " : " . $online->lastAccess . " : <br>";
-            var_dump(date_add($date, date_interval_create_from_date_string('30 minute')));
-            echo "<br>";
-            var_dump(date_add($date, date_interval_create_from_date_string('2 minute')) > new DateTime("now"));
-            echo "<br>";
+            if(date_add($date, date_interval_create_from_date_string('15 minute')) < new DateTime("now")){
+                $this->remove($online->userId);
+                $removed++;
+            }
         }
-        return $this->db->delete_open(PREFIX.'users_online WHERE now() > date_add(lastAccess, interval 30 minute) ');
+        return $removed;
     }
 }
