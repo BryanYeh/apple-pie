@@ -6,6 +6,7 @@ use Core\Controller,
     Core\Router,
     Core\Error,
     Helpers\Auth\Auth as AuthHelper,
+    Helpers\Csrf,
     Models\Users,
     Modules\Members\Models\Members as MembersModel;
 
@@ -37,7 +38,7 @@ class Members extends Controller
         Router::any('members','Modules\Members\Controllers\Members@members');
         Router::any('online-members','Modules\Members\Controllers\Members@online');
         Router::any('profile/(:any)','Modules\Members\Controllers\Members@viewProfile');
-        Router::any('edit-profile/(:any)','Modules\Members\Controllers\Members@editProfile');
+        Router::any('edit-profile','Modules\Members\Controllers\Members@editProfile');
     }
 
     /**
@@ -116,8 +117,9 @@ class Members extends Controller
             $data['title'] = $username . "'s Profile";
             $data['profile'] = $profile[0];
             $data['isLoggedIn'] = $this->auth->isLogged();
+            $data['csrf_token'] = Csrf::makeToken();
             View::renderTemplate('header', $data);
-            View::renderModule('Members/views/view_profile', $data);
+            View::renderModule('Members/views/edit_profile', $data);
             View::renderTemplate('footer', $data);
         }
         else
