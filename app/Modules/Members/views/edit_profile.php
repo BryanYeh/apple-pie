@@ -1,45 +1,41 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <h1>Edit Profile <?php echo $data['username']; ?></h1>
+            <h1>Edit Profile <strong><?php echo $data['profile']->username; ?></strong></h1>
             <hr>
 
-            <p>If you have an account, sign in with your username.</p>
-            <form role="form" id="login" name="login" method="post">
+            <form role="form" method="post">
                 <div class="form-group">
                     <label for="username">First Name: </label><span class="label label-danger pull-right">Required</span>
-                    <input id="username" type="text" class="form-control" name="username" placeholder="Enter your Name">
+                    <input id="username" type="text" class="form-control" name="username" placeholder="Enter your Name" value="<?php echo $data['profile']->firstName; ?>">
                 </div>
                 <div class='form-group'>
+                    <label for="gender">Gender: </label><span class="label label-danger pull-right">Required</span>
                     <select class='form-control' id='gender' name='gender'>
                         <option value='male' <?php if($data['profile']->gender == "Male") echo "selected";?> >Male</option>
                         <option value='female' <?php if($data['profile']->gender == "Female") echo "selected";?> >Female</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="email">Website: </label><span class="label label-danger pull-right">Required</span>
-                    <input id="password" type="password" class="form-control" name="password" placeholder="Enter your password">
-                </div>
-                <div class="form-group">
-                    <label for="email">Fake Image: </label><span class="label label-danger pull-right">Required</span>
-                    <img alt="User Pic" src="http://www.userapplepie.com/content/profile/small/UserApplePie_1_b3o7orlr2cv3jic121320431.jpg" class="img-circle img-responsive" style="overflow:hidden">
+                    <label for="website">Website: </label>
+                    <input id="website" type="website" class="form-control" name="website" placeholder="Enter your website">
                 </div>
                 <?php if($data['profile']->userImage != ""){ ?>
                 <div class="form-group">
                     <label for="email">Real Image: </label><span class="label label-danger pull-right">Required</span>
-                    <img alt="User Pic" src="http://www.userapplepie.com/content/profile/small/UserApplePie_1_b3o7orlr2cv3jic121320431.jpg" class="img-circle img-responsive" style="overflow:hidden">
+                    <img alt="User Pic" src="<?php echo DIR.'images/profile/'.$data['profile']->userImage; ?>" class="img-circle img-responsive">
                 </div>
                 <?php } ?>
                 <div class="form-group">
-                    <label class="control-label">Picture</label>
-                    <input type="file" class="form-control" accept="image/jpeg" id="picture[1]" name="picture[1]">
+                    <label class="control-label">Profile Picture</label>
+                    <input type="file" class="form-control" accept="image/jpeg" id="profilePic" name="profilePic">
                 </div>
                 <div class="form-group">
-                    <label for="email">Profile: </label><span class="label label-danger pull-right">Required</span>
-                    <textarea id="password"  class="form-control" name="password" placeholder="Enter Profile"></textarea>
+                    <label for="aboutMe">About Me: </label><span class="label label-danger pull-right">Required</span>
+                    <textarea id="aboutMe"  class="form-control" name="aboutMe" placeholder="Enter Profile"></textarea>
                 </div>
                 <input type="hidden" name="csrf_token" value="<?= $data['csrf_token']; ?>" />
-                <input type="submit" name="submit" class="btn btn-primary" value="Login">
+                <input type="submit" name="submit" class="btn btn-primary" value="Update my profile info!!">
             </form>
         </div>
     </div>
